@@ -18,6 +18,8 @@ for app in app_json["applist"]["apps"]:
     if app["name"]:
         try:
             cur.execute("INSERT INTO app (appid, name) VALUES (%s, %s)", (app["appid"], app["name"]))
-        except BaseException as e:
+        except Exception as e:
             print(e)
             print(app["appid"], app["name"])
+cur.execute("commit;")
+cur.close()

@@ -5,7 +5,7 @@ create table app(
 
 create table appdetail(
     appid int primary key,
-    header varchar(65532),
+    header_url varchar(65532),
     release_date date,
     type varchar(50),
     constraint fk_appid
