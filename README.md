@@ -30,7 +30,7 @@
     - **devid**: int, pk, fk(developer(devid))
     - **appid**: int, pk, fk(appdetail(appid))
 - Genre: 게임의 장르
-    - **genid**: serial, pk, 장르의 인조키
+    - **genid**: int, pk, 장르의 id(스팀 제공)
     - genre: varchar(50), 장르명
 - App_Genre: appdetails에서 제공하는 장르 목록이 다중 값 속성이기 때문에 장르 릴레이션과의 관계를 나타내는 릴레이션
     - **appid**: int, pk, fk(appdetail(appid))

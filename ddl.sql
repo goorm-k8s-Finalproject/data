@@ -71,7 +71,7 @@ create table app_dev(
 );
 
 create table genre(
-    genid serial primary key,
+    genid int primary key,
     genre varchar(50) not null
 );
 
