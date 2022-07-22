@@ -89,3 +89,37 @@ create table app_genre(
     primary key(genre_id, app_id)
 );
 
+create table recommendation(
+    app_id int,
+    count: int,
+    constraint fk_app_id
+        foreign key(app_id)
+            references appdetail(app_id)
+            on delete cascade
+);
+
+create table Publisher(
+    publisher_id serial primary key,
+    name varchar(200)
+);
+
+create table app_pub(
+    publisher_id int,
+    app_id int,
+    constraint fk_publisher_id
+        foreign key(publosher_id)
+            references publisher(publisher_id)
+            on delete cascade,
+    constraint fk_app_id
+        foreign key(app_id)
+            references appdetail(app_id)
+            on delete cascade,
+    primary key(publisher_id, app_id)
+);
+
+create table description(
+    app_id int primary key,
+    short_description text,
+    min_requirement text,
+    rec_requirement text
+);

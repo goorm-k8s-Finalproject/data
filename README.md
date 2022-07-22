@@ -48,7 +48,7 @@
     - **app_id**: int, pk, fk(appdetail(app_id))
     - short_description: text, 스팀 헤더 이미지 하단에 위치한 게임 설명
     - min_requirement: text, 요구되는 최소 사양
-    - max_requirement: text, 요구되는 권장 사양
+    - rec_requirement: text, 요구되는 권장 사양
 
 
 # SQL
