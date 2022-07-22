@@ -91,7 +91,7 @@ create table app_genre(
 
 create table recommendation(
     app_id int,
-    count: int,
+    count int,
     constraint fk_app_id
         foreign key(app_id)
             references appdetail(app_id)
@@ -107,7 +107,7 @@ create table app_pub(
     publisher_id int,
     app_id int,
     constraint fk_publisher_id
-        foreign key(publosher_id)
+        foreign key(publisher_id)
             references publisher(publisher_id)
             on delete cascade,
     constraint fk_app_id

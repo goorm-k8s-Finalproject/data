@@ -17,7 +17,7 @@ app_json = json.loads(app_list_get.text)
 for app in app_json["applist"]["apps"]:
     if app["name"]:
         try:
-            cur.execute("INSERT INTO app (appid, name) VALUES (%s, %s)", (app["appid"], app["name"]))
+            cur.execute("INSERT INTO app (app_id, name) VALUES (%s, %s)", (app["appid"], app["name"]))
         except Exception as e:
             print(e)
             print(app["appid"], app["name"])
