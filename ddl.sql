@@ -1,30 +1,30 @@
 create table app(
-    appid int primary key,
+    app_id int primary key,
     name varchar(65532) not null
 );
 
 create table appdetail(
-    appid int primary key,
+    app_id int primary key,
     header_url varchar(65532),
     release_date date,
     type varchar(50),
-    constraint fk_appid
-        foreign key(appid)
-            references app(appid)
+    constraint fk_app_id
+        foreign key(app_id)
+            references app(app_id)
             on delete cascade
 );
 
 create table dlc(
-    appid int,
-    dlcid int,
-    primary key(appid, dlcid),
-    constraint fk_appid
-        foreign key(appid)
-            references appdetail(appid)
+    app_id int,
+    dlc_id int,
+    primary key(app_id, dlc_id),
+    constraint fk_app_id
+        foreign key(app_id)
+            references appdetail(app_id)
             on delete cascade,
-    constraint fk_dlcid
-        foreign key(dlcid)
-            references app(appid)
+    constraint fk_dlc_id
+        foreign key(dlc_id)
+            references app(app_id)
             on delete cascade
 );
 
@@ -36,7 +36,7 @@ create table store(
 create table price(
     date date,
     store_id int,
-    appid int,
+    app_id int,
     price int not null,
     init_price int not null,
     discount int,
@@ -44,48 +44,48 @@ create table price(
         foreign key(store_id)
             references store(store_id)
             on delete cascade,
-    constraint fk_appid
-        foreign key(appid)
-            references appdetail(appid)
+    constraint fk_app_id
+        foreign key(app_id)
+            references appdetail(app_id)
             on delete cascade,
-    primary key(date, store_id, appid)
+    primary key(date, store_id, app_id)
 );
 
 create table developer(
-    devid serial primary key,
+    developer_id serial primary key,
     name varchar(200) not null
 );
 
 create table app_dev(
-    devid int,
-    appid int,
-    constraint fk_devid
-        foreign key(devid)
-            references developer(devid)
+    developer_id int,
+    app_id int,
+    constraint fk_developer_id
+        foreign key(developer_id)
+            references developer(developer_id)
             on delete cascade,
-    constraint fk_appid
-        foreign key(appid)
-            references appdetail(appid)
+    constraint fk_app_id
+        foreign key(app_id)
+            references appdetail(app_id)
             on delete cascade,
-    primary key(devid, appid)
+    primary key(developer_id, app_id)
 );
 
 create table genre(
-    genid int primary key,
+    genre_id int primary key,
     genre varchar(50) not null
 );
 
 create table app_genre(
-    genid int,
-    appid int,
-    constraint fk_genid
-        foreign key(genid)
-            references genre(genid)
+    genre_id int,
+    app_id int,
+    constraint fk_genre_id
+        foreign key(genre_id)
+            references genre(genre_id)
             on delete cascade,
-    constraint fk_appid
-        foreign key(appid)
-            references appdetail(appid)
+    constraint fk_app_id
+        foreign key(app_id)
+            references appdetail(app_id)
             on delete cascade,
-    primary key(genid, appid)
+    primary key(genre_id, app_id)
 );
 
