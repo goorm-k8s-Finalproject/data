@@ -1,29 +1,12 @@
 create table app(
     app_id int primary key,
     name varchar(65532) not null
-);
-
-create table appdetail(
-    app_id int primary key,
     header_url varchar(65532),
     release_date date,
     type varchar(50),
-    constraint fk_app_id
-        foreign key(app_id)
-            references app(app_id)
-            on delete cascade
-);
-
-create table dlc(
-    app_id int,
-    dlc_id int,
-    primary key(app_id, dlc_id),
-    constraint fk_app_id
-        foreign key(app_id)
-            references appdetail(app_id)
-            on delete cascade,
-    constraint fk_dlc_id
-        foreign key(dlc_id)
+    basegame_id int,
+    constraint fk_basegame_id
+        foreign key(basegame_id)
             references app(app_id)
             on delete cascade
 );
@@ -46,7 +29,7 @@ create table price(
             on delete cascade,
     constraint fk_app_id
         foreign key(app_id)
-            references appdetail(app_id)
+            references app(app_id)
             on delete cascade,
     primary key(date, store_id, app_id)
 );
@@ -65,7 +48,7 @@ create table app_dev(
             on delete cascade,
     constraint fk_app_id
         foreign key(app_id)
-            references appdetail(app_id)
+            references app(app_id)
             on delete cascade,
     primary key(developer_id, app_id)
 );
@@ -84,7 +67,7 @@ create table app_genre(
             on delete cascade,
     constraint fk_app_id
         foreign key(app_id)
-            references appdetail(app_id)
+            references app(app_id)
             on delete cascade,
     primary key(genre_id, app_id)
 );
@@ -94,7 +77,7 @@ create table recommendation(
     count int,
     constraint fk_app_id
         foreign key(app_id)
-            references appdetail(app_id)
+            references app(app_id)
             on delete cascade
 );
 
@@ -112,7 +95,7 @@ create table app_pub(
             on delete cascade,
     constraint fk_app_id
         foreign key(app_id)
-            references appdetail(app_id)
+            references app(app_id)
             on delete cascade,
     primary key(publisher_id, app_id)
 );
@@ -121,5 +104,9 @@ create table description(
     app_id int primary key,
     short_description text,
     min_requirement text,
-    rec_requirement text
+    rec_requirement text,
+    constraint fk_app_id
+        foreign key(app_id)
+            references app(app_id)
+            on delete cascade
 );
