@@ -3,6 +3,7 @@ steam api를 호출하여 app의 상세 정보를 불러오는 모듈
 """
 import requests
 import json
+import time
 
 def get_appdetail(app_id):
     """
@@ -19,9 +20,13 @@ def get_appdetail(app_id):
         상세 정보를 담은 딕셔너리
 
     """
-    appdetail_get = requests.get(f"https://store.steampowered.com/api/appdetails?appids={app_id}&cc=KRW&l=koreana")
+
+    appdetail_get = requests.get(f"https://store.steampowered.com/api/appdetails?appids={app_id}&cc=kr&l=koreana")
     detail_json = json.loads(appdetail_get.text)
+    if not detail_json:
+        return
     if detail_json[f"{app_id}"]["success"] == False:
+        print(appdetail_get.text)
         return
     data_json = detail_json[f"{app_id}"]["data"]
     
@@ -36,8 +41,12 @@ def get_appdetail(app_id):
         "developers": data_json["developers"] if "developers" in data_json else None,
         "publishers": data_json["publishers"] if "publishers" in data_json else None,
         "genres": data_json["genres"] if "genres" in data_json else None,
-        "short_decription": data_json["short_description"] if "short_description" in data_json else None,
-        "pc_requirements": data_json["pc_requirements"] if "pc_requirements" in data_json else None,
+        "short_description": data_json["short_description"] if "short_description" in data_json else None,
+        "min_requirement": data_json["pc_requirements"]["minimum"] if "pc_requirements" in data_json and "minimum" in data_json["pc_requirements"] else None,
+        "rec_requirement": data_json["pc_requirements"]["recommended"] if "pc_requirements" in data_json and "recommended" in data_json["pc_requirements"] else None,
+        "is_free": data_json["is_free"] if "is_free" in data_json else None,
+        "price_overview": data_json["price_overview"] if "price_overview" in data_json else None,
+        "basegame_id": int(data_json["fullgame"]["appid"]) if "fullgame" in data_json else None,
         }
     return result
 

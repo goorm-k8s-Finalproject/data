@@ -1,6 +1,6 @@
 create table app(
     app_id int primary key,
-    name varchar(65532) not null
+    name varchar(65532) not null,
     header_url varchar(65532),
     release_date date,
     type varchar(50),
