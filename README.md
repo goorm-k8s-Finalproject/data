@@ -17,7 +17,7 @@
     - **dlc_id**: int, pk, fk(App(app_id)) cascade, dlc의 id
 - Store: 가격 정보의 구분을 위한 상점 정보
     - **store_id**: serial, pk, 인조키
-    - name: varchar(50), Steam, Epic Games, Directg(steam), Directg(Epic)
+    - store: varchar(50), Steam, Epic Games, Directg(steam), Directg(Epic)
 - Price: 날짜의 가격 저장하는 릴레이션
     - **date**: date, pk, 날짜
     - **store_id**: serial, pk, fk(store(store_id)), 어느 곳에서 판매하는 가격인지
@@ -54,4 +54,5 @@
 [DDL SQL 파일](ddl.sql)
 
 # Python
-[api를 호출해 applist를 받아 db에 저장](applist_to_db.py)
+[p2p](p2p)
+[p2p를 사용한 예제 코드](example.py)

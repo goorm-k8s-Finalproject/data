@@ -178,6 +178,45 @@ def load_to_db(cursor, app, description, app_genre, app_pub, app_dev, recommenda
         for data in app_pub:
             copy.write_row(data)
     print("Done app_pub")
-    cursor.execute("commit")
     print(time.time() - start)
+
+def update_price(cursor, detail_list):
+    """
+
+    Parameters
+    ----------
+    cursor : TYPE
+        DESCRIPTION.
+    detail_list : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
+    result = []
+    today = datetime.now().strftime("%Y-%m-%d")
     
+    def get_price(app_detail):
+        if not app_detail: 
+            return
+        if not app_detail["price_overview"]: 
+            return
+
+        result.append((today, 1, app_detail["app_id"],
+         app_detail["price_overview"]["final"] // 100, app_detail["price_overview"]["initial"] // 100,
+         app_detail["price_overview"]["discount_percent"]))
+    
+    pool = concurrent.futures.ThreadPoolExecutor(max_workers=200)
+    threads = []
+    for detail in detail_list:
+        threads.append(pool.submit(get_price, detail))
+    concurrent.futures.wait(threads)
+    print(len(result))
+    
+    query = "COPY price (date, store_id, app_id, price, init_price, discount) FROM STDIN"
+    with cursor.copy(query) as copy:
+        for price in result:
+            copy.write_row(price)  
+    print("Done Price")

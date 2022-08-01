@@ -110,3 +110,6 @@ create table description(
             references app(app_id)
             on delete cascade
 );
+
+insert into store(store)
+values(unnest(array['Steam', 'Epic Games', 'Directg(steam)', 'Directg(Epic)']));

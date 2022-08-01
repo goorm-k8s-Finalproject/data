@@ -13,12 +13,13 @@ with psycopg.connect(dbname = dbname, user = user,
                         password = password, host = host, port = port) as conn:
     try:
         with conn.cursor() as cur:
-            with open("p2p/detail_list.pickle","rb") as fr:
+            with open("p2p/app_data.pickle","rb") as fr:
                 detail_list = pickle.load(fr)
         
             data = p2p.load_init(detail_list)
         
             p2p.load_to_db(cur, *data)
+            p2p.get_price(detail_list)
     except BaseException:
         conn.rollback()
     else:
