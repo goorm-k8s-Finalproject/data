@@ -19,7 +19,7 @@ with psycopg.connect(dbname = dbname, user = user,
             data = p2p.load_init(detail_list)
         
             p2p.load_to_db(cur, *data)
-            p2p.get_price(detail_list)
+            p2p.update_price(cur, detail_list)
     except BaseException:
         conn.rollback()
     else:
