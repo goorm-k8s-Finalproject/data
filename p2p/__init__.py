@@ -4,9 +4,40 @@ import time
 from datetime import datetime
 
 def load_init(detail_list):
+    """
+    앱 상세 정보 데이터를 처리하여 load_to_db에 넣을 수 있게 반환
+
+    Parameters
+    ----------
+    detail_list : list
+        DESCRIPTION.
+
+    Returns
+    -------
+    app : TYPE
+        DESCRIPTION.
+    description : TYPE
+        DESCRIPTION.
+    app_genre : TYPE
+        DESCRIPTION.
+    app_pub : TYPE
+        DESCRIPTION.
+    app_dev : TYPE
+        DESCRIPTION.
+    recommendation : TYPE
+        DESCRIPTION.
+    publisher : TYPE
+        DESCRIPTION.
+    developer : TYPE
+        DESCRIPTION.
+    genre : TYPE
+        DESCRIPTION.
+
+    """
     app, description, app_genre, app_pub, app_dev, recommendation = [], [], [], [], [], []
     publisher, developer = {}, {}
     genre = {}
+    app_ids = set()
     
     start = time.time()
     pool = concurrent.futures.ThreadPoolExecutor(max_workers=200)
@@ -19,16 +50,15 @@ def load_init(detail_list):
             return
         if not app_detail["price_overview"]: 
             return
-        if app_detail["release_date"]["coming_soon"]: 
-            return
-        if app_detail["contents_type"] != "game":
-            return
+        if app_detail["basegame_id"]:
+            if app_detail["basegame_id"] not in app_ids:
+                return
         if "date" in app_detail["release_date"]:
             try:
                 date = datetime.strptime(app_detail["release_date"]["date"], "%Y년 %m월 %d일")
             except:
                 date = None
-        
+        app_ids.add(app_detail["app_id"])
         app.append((app_detail["app_id"], app_detail["name"], app_detail["header_url"],
                     date, app_detail["contents_type"], app_detail["basegame_id"]))
         description.append((app_detail["app_id"], app_detail["short_description"],
@@ -62,6 +92,37 @@ def load_init(detail_list):
     return app, description, app_genre, app_pub, app_dev, recommendation, publisher, developer, genre
 
 def load_to_db(cursor, app, description, app_genre, app_pub, app_dev, recommendation, publisher, developer, genre):
+    """
+    load_init의 데이터를 받아서 db에 적재함
+
+    Parameters
+    ----------
+    cursor : psycopg.Cursor
+        psycopg의 cursor
+    app : list
+        DESCRIPTION.
+    description : list
+        DESCRIPTION.
+    app_genre : list
+        DESCRIPTION.
+    app_pub : list
+        DESCRIPTION.
+    app_dev : list
+        DESCRIPTION.
+    recommendation : list
+        DESCRIPTION.
+    publisher : dict
+        DESCRIPTION.
+    developer : dict
+        DESCRIPTION.
+    genre : dict
+        DESCRIPTION.
+
+    Returns
+    -------
+    None.
+
+    """
     start = time.time()
     # App
     query = "COPY app (app_id, name, header_url, release_date, type, basegame_id) FROM STDIN"
