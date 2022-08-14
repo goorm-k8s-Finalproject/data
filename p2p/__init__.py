@@ -143,10 +143,12 @@ def load_to_db(cursor, app, description, app_genre, app_pub, app_dev, recommenda
             copy.write_row(data)
     print("Done genre")
     # App_Genre
-    query = "COPY app_genre (app_id, genre_id) FROM STDIN"
+    cursor.execute("CREATE TEMPORARY TABLE tmp_app_genre (app_id int, genre_id int) ON COMMIT DROP")
+    query = "COPY tmp_app_genre (app_id, genre_id) FROM STDIN"
     with cursor.copy(query) as copy:
         for data in app_genre:
             copy.write_row(data)
+    cursor.execute("INSERT INTO app_genre(app_id, genre_id) SELECT app_id, genre_id FROM tmp_app_genre ON CONFLICT DO NOTHING")
     print("Done app_genre")
     # Recommendation
     query = "COPY recommendation (app_id, count) FROM STDIN"
@@ -167,16 +169,20 @@ def load_to_db(cursor, app, description, app_genre, app_pub, app_dev, recommenda
             copy.write_row(data)
     print("Done pub")
     # App_Dev
-    query = "COPY app_dev (app_id, developer_id) FROM STDIN"
+    cursor.execute("CREATE TEMPORARY TABLE tmp_app_dev (app_id int, developer_id int) ON COMMIT DROP")
+    query = "COPY tmp_app_dev (app_id, developer_id) FROM STDIN"
     with cursor.copy(query) as copy:
         for data in app_dev:
             copy.write_row(data)
+    cursor.execute("INSERT INTO app_dev (app_id, developer_id) SELECT app_id, developer_id FROM tmp_app_dev ON CONFLICT DO NOTHING")
     print("Done app_dev")
     # App_Pub
-    query = "COPY app_pub (app_id, publisher_id) FROM STDIN"
+    cursor.execute("CREATE TEMPORARY TABLE tmp_app_pub (app_id int, publisher_id int) ON COMMIT DROP")
+    query = "COPY tmp_app_pub (app_id, publisher_id) FROM STDIN"
     with cursor.copy(query) as copy:
         for data in app_pub:
             copy.write_row(data)
+    cursor.execute("INSERT INTO app_pub (app_id, publisher_id) SELECT app_id, publisher_id FROM tmp_app_pub ON CONFLICT DO NOTHING")
     print("Done app_pub")
     print(time.time() - start)
 
@@ -215,8 +221,10 @@ def update_price(cursor, detail_list):
     concurrent.futures.wait(threads)
     print(len(result))
     
-    query = "COPY price (date, store_id, app_id, price, init_price, discount) FROM STDIN"
+    cursor.execute("CREATE TEMPORARY TABLE tmp_price (date date, store_id int, app_id int, price int, init_price int, discount int) ON COMMIT DROP")
+    query = "COPY tmp_price (date, store_id, app_id, price, init_price, discount) FROM STDIN"
     with cursor.copy(query) as copy:
         for price in result:
-            copy.write_row(price)  
+            copy.write_row(price)
+    cursor.execute("INSERT INTO price (date, store_id, app_id, price, init_price, discount) SELECT date, store_id, app_id, price, init_price, discount FROM tmp_price ON CONFLICT DO NOTHING")
     print("Done Price")

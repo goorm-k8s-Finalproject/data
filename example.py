@@ -20,7 +20,8 @@ with psycopg.connect(dbname = dbname, user = user,
         
             p2p.load_to_db(cur, *data)
             p2p.update_price(cur, detail_list)
-    except BaseException:
+    except BaseException as e:
+        print(e)
         conn.rollback()
     else:
         conn.commit()

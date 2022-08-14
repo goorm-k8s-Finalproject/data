@@ -17,6 +17,7 @@ create table store(
 );
 
 create table price(
+    price_key serial primary key,
     date date,
     store_id int,
     app_id int,
@@ -30,8 +31,7 @@ create table price(
     constraint fk_app_id
         foreign key(app_id)
             references app(app_id)
-            on delete cascade,
-    primary key(date, store_id, app_id)
+            on delete cascade
 );
 
 create table developer(
@@ -40,6 +40,7 @@ create table developer(
 );
 
 create table app_dev(
+    app_dev_id serial primary key,
     developer_id int,
     app_id int,
     constraint fk_developer_id
@@ -49,8 +50,7 @@ create table app_dev(
     constraint fk_app_id
         foreign key(app_id)
             references app(app_id)
-            on delete cascade,
-    primary key(developer_id, app_id)
+            on delete cascade
 );
 
 create table genre(
@@ -59,6 +59,7 @@ create table genre(
 );
 
 create table app_genre(
+    app_genre_id serial primary key,
     genre_id int,
     app_id int,
     constraint fk_genre_id
@@ -68,12 +69,11 @@ create table app_genre(
     constraint fk_app_id
         foreign key(app_id)
             references app(app_id)
-            on delete cascade,
-    primary key(genre_id, app_id)
+            on delete cascade
 );
 
 create table recommendation(
-    app_id int,
+    app_id int primary key,
     count int,
     constraint fk_app_id
         foreign key(app_id)
@@ -87,6 +87,7 @@ create table Publisher(
 );
 
 create table app_pub(
+    app_pub_id serial primary key,
     publisher_id int,
     app_id int,
     constraint fk_publisher_id
@@ -96,8 +97,7 @@ create table app_pub(
     constraint fk_app_id
         foreign key(app_id)
             references app(app_id)
-            on delete cascade,
-    primary key(publisher_id, app_id)
+            on delete cascade
 );
 
 create table description(
