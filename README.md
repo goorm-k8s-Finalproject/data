@@ -1,4 +1,10 @@
-# ERD
+# 개요
+p2p의 데이터 수집 및 데이터베이스 설계 레포입니다.
+
+데이터베이스로는 PostgreSQL ver. 14.2를 사용하였고 가용성을 보장하기 위해 AWS RDS 상에서 작업하였습니다.
+데이터 수집은 Python 3.8을 사용하여 [Steam web api](https://partner.steamgames.com/doc/api?l=koreana)와 통신하여 데이터를 수집하고 psycopg3 라이브러리를 활용하여 DB에 적재하였습니다. 
+
+## ERD
 
 ![ERD](attached/erd.png)
 
@@ -50,9 +56,9 @@
     - rec_requirement: text, 요구되는 권장 사양
 
 
-# SQL
+## SQL
 [DDL SQL 파일](ddl.sql)
 
-# Python
+## Python
 [p2p](p2p)
 [p2p를 사용한 예제 코드](example.py)
